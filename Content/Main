@@ -1,0 +1,543 @@
+-- AstraHub Troll Exploit UI
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService") -- Added for tracers
+local fakeban = "You have been kick from this experience : CHEATING IS AGAINTS THE RULE!"
+local correctKey = "Astra_FREE-K8F3LZ2W9QXN1CR4" -- string.upper(string.gsub(game:GetService("HttpService"):GenerateGUID(false), "-", "")):sub(1, 16)
+
+-- Screen GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "AstraHubUI"
+gui.ResetOnSpawn = false
+gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Main Toggle Button (Draggable)
+local toggleFrame = Instance.new("Frame")
+toggleFrame.Size = UDim2.new(0, 120, 0, 30)
+toggleFrame.Position = UDim2.new(0.5, -60, 0, 10)
+toggleFrame.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+toggleFrame.BorderSizePixel = 0
+toggleFrame.AnchorPoint = Vector2.new(0.5, 0)
+toggleFrame.Active = true
+toggleFrame.Draggable = true
+toggleFrame.Parent = gui
+
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(1, 0, 1, 0)
+toggleButton.Position = UDim2.new(0, 0, 0, 0)
+toggleButton.BackgroundTransparency = 1
+toggleButton.Text = "AstraHub [ON]"
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 14
+toggleButton.Parent = toggleFrame
+
+-- Draggable Frame
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 350, 0, 200)
+main.Position = UDim2.new(0.5, -175, 0.5, -100)
+main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+main.BorderSizePixel = 0
+main.AnchorPoint = Vector2.new(0.5, 0.5)
+main.Active = true
+main.Draggable = true
+main.Parent = gui
+
+-- TopBar for Title and Close
+local topBar = Instance.new("Frame")
+topBar.Size = UDim2.new(1, 0, 0, 30)
+topBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+topBar.BorderSizePixel = 0
+topBar.Parent = main
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -35, 1, 0)
+title.Position = UDim2.new(0, 5, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "AstraHub Key System"
+title.TextColor3 = Color3.fromRGB(0, 170, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 16
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = topBar
+
+local closeBtn = Instance.new("TextButton")
+closeBtn.Size = UDim2.new(0, 30, 1, 0)
+closeBtn.Position = UDim2.new(1, -30, 0, 0)
+closeBtn.Text = "X"
+closeBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 14
+closeBtn.Parent = topBar
+
+-- Key Input
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(0.9, 0, 0, 30)
+keyBox.Position = UDim2.new(0.05, 0, 0.5, -15)
+keyBox.PlaceholderText = "Enter your key here..."
+keyBox.Text = ""
+keyBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.Font = Enum.Font.Gotham
+keyBox.TextSize = 14
+keyBox.Parent = main
+
+local submit = Instance.new("TextButton")
+submit.Size = UDim2.new(0.9, 0, 0, 30)
+submit.Position = UDim2.new(0.05, 0, 0.7, -15)
+submit.Text = "Submit Key"
+submit.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+submit.TextColor3 = Color3.fromRGB(255, 255, 255)
+submit.Font = Enum.Font.GothamBold
+submit.TextSize = 14
+submit.Parent = main
+
+-- Store tracer connections
+local tracerConnections = {}
+
+-- ESP Function
+local function toggleESP(enabled)
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            if enabled then
+                -- Don't create if already exists
+                if not player.Character:FindFirstChild("AstraESP") then
+                    local highlight = Instance.new("Highlight")
+                    highlight.Name = "AstraESP"
+                    highlight.FillColor = Color3.fromRGB(0, 255, 127)
+                    highlight.OutlineColor = Color3.new(1, 1, 1)
+                    highlight.FillTransparency = 0.5
+                    highlight.OutlineTransparency = 0
+                    highlight.Adornee = player.Character
+                    highlight.Parent = player.Character
+                end
+            else
+                local existing = player.Character:FindFirstChild("AstraESP")
+                if existing then
+                    existing:Destroy()
+                end
+            end
+        end
+    end
+end
+
+-- Tracer Function (Now actually creates lines)
+local function toggleTracer(enabled)
+    -- Clean up existing tracers
+    for _, connection in pairs(tracerConnections) do
+        connection:Disconnect()
+    end
+    tracerConnections = {}
+    
+    -- Remove existing tracers
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == "AstraTracer" then
+            obj:Destroy()
+        end
+    end
+    
+    if not enabled then return end
+    
+    -- Create new tracers
+    local function createTracer(player)
+        if player == LocalPlayer then return end
+        
+        local tracer = Instance.new("Beam")
+        tracer.Name = "AstraTracer"
+        tracer.Color = ColorSequence.new(Color3.fromRGB(255, 0, 0))
+        tracer.Width0 = 0.1
+        tracer.Width1 = 0.1
+        tracer.FaceCamera = true
+        tracer.Enabled = true
+        
+        local attachment0 = Instance.new("Attachment")
+        local attachment1 = Instance.new("Attachment")
+        tracer.Attachment0 = attachment0
+        tracer.Attachment1 = attachment1
+        
+        attachment0.Parent = workspace.Terrain
+        attachment1.Parent = workspace.Terrain
+        tracer.Parent = workspace
+        
+        local connection = RunService.RenderStepped:Connect(function()
+            if not player or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") 
+               or not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                return
+            end
+            
+            attachment0.WorldPosition = LocalPlayer.Character.HumanoidRootPart.Position
+            attachment1.WorldPosition = player.Character.HumanoidRootPart.Position
+        end)
+        
+        table.insert(tracerConnections, connection)
+        
+        return tracer
+    end
+    
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            createTracer(player)
+        end
+    end
+    
+    local playerAddedConn = Players.PlayerAdded:Connect(function(player)
+        createTracer(player)
+    end)
+    
+    table.insert(tracerConnections, playerAddedConn)
+end
+
+-- Super Speed Function
+local function toggleSuperSpeed(enabled, speed)
+    if not enabled then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        end
+        return
+    end
+    
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+        LocalPlayer.Character.Humanoid.WalkSpeed = speed or 50
+    end
+end
+
+-- Fly Function
+local flyConnection = nil
+local function toggleFly(enabled, speed)
+    -- Clean up existing fly connection if there is one
+    if flyConnection then
+        flyConnection:Disconnect()
+        flyConnection = nil
+    end
+    
+    if not enabled then
+        -- Reset character physics
+        if LocalPlayer.Character then
+            if LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid.PlatformStand = false
+            end
+            for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = true
+                end
+            end
+        end
+        return
+    end
+    
+    -- Implementation of custom fly
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character:FindFirstChild("Humanoid") then
+        local root = LocalPlayer.Character.HumanoidRootPart
+        local humanoid = LocalPlayer.Character.Humanoid
+        local flySpeed = speed or 50
+        
+        -- Make character stand on invisible platform
+        humanoid.PlatformStand = true
+        
+        -- Disable collision for all parts
+        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+        
+        -- Create fly control
+        local controls = {
+            ["w"] = false,
+            ["a"] = false,
+            ["s"] = false,
+            ["d"] = false,
+            ["e"] = false,
+            ["q"] = false
+        }
+        
+        -- Set up key detection
+        local uis = game:GetService("UserInputService")
+        local function handleInput(input, gameProcessed)
+            if gameProcessed then return end
+            
+            local inputKey = string.lower(input.KeyCode.Name)
+            if controls[inputKey] ~= nil then
+                controls[inputKey] = input.UserInputState == Enum.UserInputState.Begin
+            end
+        end
+        
+        -- Connect key events
+        flyConnection = RunService.RenderStepped:Connect(function()
+            if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                if flyConnection then
+                    flyConnection:Disconnect()
+                    flyConnection = nil
+                end
+                return
+            end
+            
+            -- Calculate movement direction
+            local moveDirection = Vector3.new(0, 0, 0)
+            
+            -- Forward/Back
+            if controls["w"] then
+                moveDirection = moveDirection + (workspace.CurrentCamera.CFrame.LookVector * flySpeed)
+            end
+            if controls["s"] then
+                moveDirection = moveDirection - (workspace.CurrentCamera.CFrame.LookVector * flySpeed)
+            end
+            
+            -- Left/Right
+            if controls["a"] then
+                moveDirection = moveDirection - (workspace.CurrentCamera.CFrame.RightVector * flySpeed)
+            end
+            if controls["d"] then
+                moveDirection = moveDirection + (workspace.CurrentCamera.CFrame.RightVector * flySpeed)
+            end
+            
+            -- Up/Down
+            if controls["e"] then
+                moveDirection = moveDirection + Vector3.new(0, flySpeed, 0)
+            end
+            if controls["q"] then
+                moveDirection = moveDirection - Vector3.new(0, flySpeed, 0)
+            end
+            
+            -- Apply movement
+            if moveDirection.Magnitude > 0 then
+                root.Velocity = moveDirection
+            else
+                root.Velocity = Vector3.new(0, 0, 0)
+            end
+        end)
+        
+        -- Connect input
+        uis.InputBegan:Connect(handleInput)
+        uis.InputEnded:Connect(handleInput)
+    end
+end
+
+-- Auto Bond Function
+local function autoBond()
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local root = LocalPlayer.Character.HumanoidRootPart
+        local randomOffset = Vector3.new(
+            math.random(-200, 200),
+            0,
+            math.random(-200, 200))
+        root.CFrame = root.CFrame + randomOffset
+        LocalPlayer:Kick(fakeban)
+    end
+end
+
+-- Infinite Yield (Fake)
+local function infiniteYield()
+    LocalPlayer:Kick(fakeban)
+end
+
+-- Kill Aura (Fake)
+local function killAura()
+    LocalPlayer:Kick(fakeban)
+end
+
+-- Settings UI Functions
+local function createSlider(parent, name, min, max, default, callback)
+    local sliderFrame = Instance.new("Frame")
+    sliderFrame.Size = UDim2.new(0.9, 0, 0, 40)
+    sliderFrame.BackgroundTransparency = 1
+    sliderFrame.Parent = parent
+    
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, 0, 0, 15)
+    label.BackgroundTransparency = 1
+    label.Text = name .. ": " .. default
+    label.TextColor3 = Color3.new(1, 1, 1)
+    label.Font = Enum.Font.Gotham
+    label.TextSize = 12
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = sliderFrame
+    
+    local slider = Instance.new("TextButton")
+    slider.Size = UDim2.new(1, 0, 0, 20)
+    slider.Position = UDim2.new(0, 0, 0, 15)
+    slider.Text = ""
+    slider.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    slider.Parent = sliderFrame
+    
+    local fill = Instance.new("Frame")
+    fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
+    fill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    fill.BorderSizePixel = 0
+    fill.Parent = slider
+    
+    local dragging = false
+    slider.MouseButton1Down:Connect(function()
+        dragging = true
+    end)
+    
+    game:GetService("UserInputService").InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+    
+    slider.MouseMoved:Connect(function()
+        if dragging then
+            local x = (game:GetService("UserInputService"):GetMouseLocation().X - slider.AbsolutePosition.X) / slider.AbsoluteSize.X
+            x = math.clamp(x, 0, 1)
+            fill.Size = UDim2.new(x, 0, 1, 0)
+            local value = math.floor(min + (max - min) * x)
+            label.Text = name .. ": " .. value
+            callback(value)
+        end
+    end)
+    
+    return sliderFrame
+end
+
+-- Fake Menu with all features
+local function loadFakeUI()
+    main:ClearAllChildren()
+    main.Size = UDim2.new(0, 350, 0, 400)
+
+    -- Scroll Frame
+    local scrollFrame = Instance.new("ScrollingFrame")
+    scrollFrame.Size = UDim2.new(1, 0, 1, 0)
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 600)
+    scrollFrame.ScrollBarThickness = 5
+    scrollFrame.BackgroundTransparency = 1
+    scrollFrame.Parent = main
+
+    -- Top Bar
+    local topBar = Instance.new("Frame")
+    topBar.Size = UDim2.new(1, 0, 0, 30)
+    topBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    topBar.BorderSizePixel = 0
+    topBar.Parent = scrollFrame
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 1, 0)
+    title.BackgroundTransparency = 1
+    title.Text = "AstraHub Menu"
+    title.TextColor3 = Color3.new(1, 1, 1)
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 20
+    title.Parent = topBar
+
+    -- Features
+    local features = {
+        {name = "ESP", func = toggleESP, hasSettings = false},
+        {name = "Tracer", func = toggleTracer, hasSettings = false},
+        {name = "Super Speed", func = toggleSuperSpeed, hasSettings = true, min = 20, max = 200, default = 50},
+        {name = "Fly", func = toggleFly, hasSettings = true, min = 20, max = 200, default = 50},
+        {name = "Infinite Yield", func = infiniteYield, hasSettings = false},
+        {name = "Auto Bond", func = autoBond, hasSettings = false},
+        {name = "Kill Aura", func = killAura, hasSettings = false}
+    }
+
+    local yOffset = 40
+    for i, feature in ipairs(features) do
+        local toggle = Instance.new("TextButton")
+        toggle.Size = UDim2.new(0.9, 0, 0, 30)
+        toggle.Position = UDim2.new(0.05, 0, 0, yOffset)
+        toggle.Text = feature.name .. " [OFF]"
+        toggle.Name = feature.name
+        toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+        toggle.Font = Enum.Font.Gotham
+        toggle.TextSize = 14
+        toggle.Parent = scrollFrame
+
+        yOffset = yOffset + 35
+
+        local state = false
+        local settings = {}
+        
+        if feature.hasSettings then
+            local slider = createSlider(scrollFrame, feature.name .. " Speed", feature.min, feature.max, feature.default, function(value)
+                if state then
+                    feature.func(true, value)
+                end
+                settings.speed = value
+            end)
+            slider.Position = UDim2.new(0.05, 0, 0, yOffset)
+            yOffset = yOffset + 45
+        end
+
+        toggle.MouseButton1Click:Connect(function()
+            state = not state
+            toggle.Text = feature.name .. (state and " [ON]" or " [OFF]")
+            
+            if feature.name == "Infinite Yield" or feature.name == "Kill Aura" then
+                if state then
+                    task.wait(1)
+                    feature.func()
+                end
+            elseif feature.name == "Auto Bond" then
+                if state then
+                    feature.func()
+                end
+            else
+                if feature.hasSettings then
+                    feature.func(state, settings.speed or feature.default)
+                else
+                    feature.func(state)
+                end
+            end
+        end)
+    end
+
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset + 10)
+    
+    -- Don't automatically enable ESP
+    -- Removed the automatic ESP enable
+end
+
+-- Key Submission
+submit.MouseButton1Click:Connect(function()
+    if keyBox.Text == correctKey then
+        submit.Text = "Loading AstraHub..."
+        submit.BackgroundColor3 = Color3.fromRGB(255, 170, 0)
+        task.wait(2)
+        loadFakeUI()
+    else
+        submit.Text = "Invalid Key"
+        keyBox.Text = ""
+    end
+end)
+
+-- Main toggle button functionality
+local isVisible = true
+toggleButton.MouseButton1Click:Connect(function()
+    isVisible = not isVisible
+    main.Visible = isVisible
+    toggleButton.Text = "AstraHub " .. (isVisible and "[ON]" or "[OFF]")
+    
+    -- If hiding, also disable features
+    if not isVisible then
+        toggleESP(false)
+        toggleTracer(false)
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        end
+        if flyConnection then
+            flyConnection:Disconnect()
+            flyConnection = nil
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid.PlatformStand = false
+            end
+            for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = true
+                end
+            end
+        end
+    end
+end)
+
+-- Close Button Function
+closeBtn.MouseButton1Click:Connect(function()
+    main.Visible = false
+    isVisible = false
+    toggleButton.Text = "AstraHub [OFF]"
+end)
+
+-- Print the current working bait key to dev console
+warn("[AstraHub] Current bait key:", correctKey)
