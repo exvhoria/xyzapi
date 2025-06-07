@@ -1,0 +1,181 @@
+{
+  "intro": {
+    "title": "SMBI - Speedrun Minecraft Bendera Indonesia",
+    "description": [
+      "SMBI adalah singkatan dari \"Speedrun Minecraft Bendera Indonesia\", salah satu kategori speedrun dimana pemain minecraft mencoba untuk membuat bendera indonesia secepatnya.",
+      "Untuk tau lebih lanjut, pemain harus mencari material untuk fullblock bebas bewarna merah dan putih untuk membuat bendera indonesia dalam banding 2:3 (setinggi 2 blok dan sepanjang 3 blok)",
+      "Speedrun ini dibagi menjadi dua, khusus untuk java dan bedrock.",
+      "Untuk rekor speedrun sebelum leaderboard ini dibuat tidak dimasukan disini, jadi semua rekor disini adalah yang baru."
+    ]
+  },
+  "approvedBlocks": {
+    "red": [
+      "Fire Coral Block",
+      "Redstone Block",
+      "Red Concrete",
+      "Red Concrete Powder",
+      "Red Glazed Terracotta",
+      "Red Mushroom Block",
+      "Red Shulker Box",
+      "Red Wool"
+    ],
+    "white": [
+      "Bone Block",
+      "Block Of Iron",
+      "Block Of Quartz",
+      "Calcite",
+      "Chiseled Quartz Block",
+      "Pale Oak Plank",
+      "Quartz Brick",
+      "Quartz Pillar",
+      "Snow Block",
+      "Stripped Pale Oak Wood/Hyphae",
+      "Smooth Quartz Block",
+      "White Concrete",
+      "White Concrete Powder",
+      "White Mushroom Block",
+      "White Shulker Box",
+      "White Wool"
+    ]
+  },
+  "requirements": {
+    "java": [
+      "Tidak boleh cheat (sudah pasti)",
+      "Versi harus 1.21.5 (tidak boleh keatas/bawah)",
+      "RSG (a.k.a Random Seed Glitchless, seed world yang digunakan harus random dan tidak boleh dipakai terus menerus)",
+      "Pake recourse pack dibolehkan, tapi kalau untuk cheat tentu tidak diperbolehkan",
+      "Speedrun harus direkam dan diupload di media sosial, atau agar bisa lebih dipercaya boleh di stream di media sosial.",
+      "Tag #SMBI, dan kalo mau tag aku, kalo mau juga Join Discord dan submit di #SMBI Java Submit.",
+      "Kasih Seed divideo/stream atau saat submit agar bisa cek keaslian worldnya."
+    ],
+    "bedrock": [
+      "Tidak boleh cheat (sudah pasti)",
+      "Versi pakai paling terbaru (Saat ini 1.21.80-1.21.82)",
+      "Pake recourse pack dibolehkan, tapi kalau untuk cheat tentu tidak diperbolehkan",
+      "RSG (a.k.a Random Seed Glitchless, seed world yang digunakan harus random dan tidak boleh dipakai terus menerus)",
+      "Speedrun harus direkam dan diupload di media sosial, atau agar bisa lebih dipercaya boleh di stream di media sosial.",
+      "Tag #SMBI, dan kalo mau tag aku, kalo mau juga Join Discord dan submit di #SMBI Bedrock Submit.",
+      "Kasih Seed divideo/stream atau saat submit agar bisa dicek keaslian worldnya."
+    ]
+  },
+  "leaderboards": {
+    "java": [
+      {
+        "rank": 1,
+        "name": "Clementdav",
+        "time": "00:15.883",
+        "link": "#"
+      },
+      {
+        "rank": 2,
+        "name": "Faism4k",
+        "time": "00:20.533",
+        "link": "#"
+      },
+      {
+        "rank": 3,
+        "name": "VITOAJEE",
+        "time": "00:39.546",
+        "link": "#"
+      },
+      {
+        "rank": 4,
+        "name": "ValenGaming",
+        "time": "01:53.441",
+        "link": "#"
+      }
+    ],
+    "bedrock": [
+      {
+        "rank": 1,
+        "name": "DyyStellar",
+        "time": "00:17.541",
+        "link": "#"
+      },
+      {
+        "rank": 2,
+        "name": "FlopSetz_",
+        "time": "00:31.532",
+        "link": "#"
+      },
+      {
+        "rank": 3,
+        "name": "AdityaMC",
+        "time": "00:39.335",
+        "link": "#"
+      },
+      {
+        "rank": 4,
+        "name": "KunfaMFC",
+        "time": "00:45.880",
+        "link": "#"
+      },
+      {
+        "rank": 5,
+        "name": "MasterCrizz ID",
+        "time": "00:55.031",
+        "link": "#"
+      },
+      {
+        "rank": 6,
+        "name": "Grass_GG",
+        "time": "00:58.123",
+        "link": "#"
+      },
+      {
+        "rank": 7,
+        "name": "ZimsMC",
+        "time": "01:24.325",
+        "link": "#"
+      },
+      {
+        "rank": 8,
+        "name": "Fanz_Kyy",
+        "time": "01:42.378",
+        "link": "#"
+      },
+      {
+        "rank": 9,
+        "name": "JazardZD",
+        "time": "01:43.124",
+        "link": "#"
+      },
+      {
+        "rank": 10,
+        "name": "Alejandro Ujang",
+        "time": "01:44.662",
+        "link": "#"
+      },
+      {
+        "rank": 11,
+        "name": "Fallin",
+        "time": "02:02.823",
+        "link": "#"
+      },
+      {
+        "rank": 12,
+        "name": "AbdeelQodeer",
+        "time": "02:02.999",
+        "link": "#"
+      },
+      {
+        "rank": 13,
+        "name": "Blue Shroom",
+        "time": "02:26.510",
+        "link": "#"
+      },
+      {
+        "rank": 14,
+        "name": "VITOAJEE",
+        "time": "02:31.001",
+        "link": "#"
+      },
+      {
+        "rank": 15,
+        "name": "Unknown000",
+        "time": "03:06.641",
+        "link": "#"
+      }
+    ]
+  }
+}
